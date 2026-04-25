@@ -13,15 +13,18 @@ namespace LanceCoffeeSystem.Application.Features.CoffeeSystem.Queries.BrewCoffee
         {
             private readonly IDateTimeService _dateTimeService;
             private readonly ICoffeeCounterService _coffeeCounterService;
-            public GetBrewCoffeeQueryHandler(IDateTimeService dateTimeService, ICoffeeCounterService coffeeCounterService)
+            private readonly IWeatherService _weatherService;
+            public GetBrewCoffeeQueryHandler(IDateTimeService dateTimeService, ICoffeeCounterService coffeeCounterService, IWeatherService weatherService)
             {
                 _dateTimeService = dateTimeService;
                 _coffeeCounterService = coffeeCounterService;
+                _weatherService = weatherService;
             }
 
             public async Task<GetBrewCoffeeResponse> Handle(GetBrewCoffeeQuery query, CancellationToken cancellationToken)
             {
                 var count = _coffeeCounterService.Increment();
+                var weatherAPIResponse = await _weatherService.GetCurrentWeatherAsync("Batangas");
                 string message = "Your piping hot coffee is ready.";
                 var dateNowPH = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
                     _dateTimeService.NowUtc,
@@ -35,7 +38,11 @@ namespace LanceCoffeeSystem.Application.Features.CoffeeSystem.Queries.BrewCoffee
                 if (count % 5 == 0)
                 {
                     throw new CoffeeUnavailableException();
-                }                
+                }
+                if (weatherAPIResponse.main.temp > 30)
+                {
+                    message = "Your refreshing iced coffee is ready.";
+                }
 
                 GetBrewCoffeeResponse response = new GetBrewCoffeeResponse()
                 {

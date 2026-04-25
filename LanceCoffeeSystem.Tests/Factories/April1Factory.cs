@@ -14,13 +14,13 @@ public class April1Factory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            services.AddTransient<IDateTimeService, NormalDateMock>();
+            services.AddTransient<IDateTimeService, AprilOneDateMock>();
             services.AddTransient<ICoffeeCounterService, AvailableCounterMock>();
         });
     }
 }
 
-public class NormalDateMock : IDateTimeService
+public class AprilOneDateMock : IDateTimeService
 {
     public DateTime NowUtc => new DateTime(2026, 4, 1);
 }

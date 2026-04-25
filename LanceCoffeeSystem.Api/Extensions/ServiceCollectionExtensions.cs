@@ -28,10 +28,12 @@ namespace LanceCoffeeSystem.Api.Extensions
         public static void AddSharedInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+            services.Configure<WeatherSettings>(configuration.GetSection("WeatherSettings"));
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
             services.AddSingleton<ICoffeeCounterService, CoffeeCounterService>();
             services.AddTransient<IDateTimeService, SystemDateTimeService>();
             services.AddTransient<IMailService, SMTPMailService>();
+            services.AddScoped<IWeatherService, WeatherService>();
             services.AddTransient<IAuthenticatedUserService, AuthenticatedUserService>();
         }
 
