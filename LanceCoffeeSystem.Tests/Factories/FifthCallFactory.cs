@@ -15,7 +15,7 @@ public class FifthCallFactory : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             services.AddTransient<IDateTimeService, NormalDateMock>();
-            services.AddTransient<ICoffeeCounterService, AvailableCounterMock>();
+            services.AddTransient<ICoffeeCounterService, FifthCallCounterMock>();
         });
     }
 }
@@ -25,7 +25,7 @@ public class NormalDateMock : IDateTimeService
     public DateTime NowUtc => new DateTime(2026, 4, 25);
 }
 
-public class AvailableCounterMock : ICoffeeCounterService
+public class FifthCallCounterMock : ICoffeeCounterService
 {
     public int Increment() => 5;
 }
